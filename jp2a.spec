@@ -2,16 +2,17 @@
 
 Name:           jp2a
 Version:        1.0.7
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Small utility that converts JPG images to ASCII (text) using libjpeg
 
 License:        GPLv2+
 URL:            https://csl.name/%{name}
-Source0:        %{srcurl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/FascodeNet/jp2a_cmake/archive/refs/tags/cmake-2021-03-24.tar.gz
 
-BuildRequires:  autoconf automake gcc libjpeg-turbo-devel
+BuildRequires:  clang libjpeg-turbo-devel cmake ninja-build
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libjpeg)
+%global debug_package %{nil}
 
 %description
 jp2a is a simple JPEG to ASCII converter. jp2a is very flexible.
@@ -20,28 +21,23 @@ jp2a can also download and convert images from Internet via command line.
 
 
 %prep
-%autosetup
-autoreconf -vi
+rm -rf %{buildroot}
 
+%setup -n jp2a_cmake-cmake-2021-03-24
 
 %build
-./configure --prefix=${RPM_BUILD_ROOT}/usr/
-make -j4
-
 %install
-make install
+mkdir -p build
+cd build
+cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..
+ninja -j4
+mkdir -p ${RPM_BUILD_ROOT}/usr/bin
+cp ./src/jp2a ${RPM_BUILD_ROOT}/usr/bin/
 
-
-%check
-make %{?_smp_mflags} check
 
 
 %files
-%license COPYING
-%doc LICENSES
-%doc AUTHORS BUGS ChangeLog NEWS README
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+/usr/bin/jp2a
 
 
 %changelog
