@@ -9,7 +9,7 @@ License:        GPLv2+
 URL:            https://csl.name/%{name}
 Source0:        %{srcurl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-BuildRequires:  autoconf automake gcc
+BuildRequires:  autoconf automake gcc libjpeg-turbo-devel
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libjpeg)
 
