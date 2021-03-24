@@ -25,12 +25,11 @@ autoreconf -vi
 
 
 %build
-%configure --with-jpeg-prefix=%{_prefix} 
-%make_build
-
+./configure --prefix=${RPM_BUILD_ROOT}/usr/
+make -j4
 
 %install
-%make_install
+make install
 
 
 %check
